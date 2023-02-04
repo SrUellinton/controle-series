@@ -33,21 +33,20 @@ class SeriesController extends Controller
                 'series_id' => $serie->id,
                 'number' => $i
             ];
-
-            Seasons::insert($seasons);
-
-            $episodes = [];
-            foreach ($serie->seasons as $season) {
-                for ($j = 1; $j <= $request->episodesPerSeason ; $j++) { 
-                    $episodes[] = [
-                        'seasons_id' => $season->id,
-                        'number' => $j
-                    ];
-                }
-            }
-
-            Episodes::insert($episodes);
         }
+        Seasons::insert($seasons);
+
+        $episodes = [];
+        foreach ($serie->seasons as $season) {
+            for ($j = 1; $j <= $request->episodesPerSeason; $j++) {
+                $episodes[] = [
+                    'seasons_id' => $season->id,
+                    'number' => $j
+                ];
+            }
+        }
+
+        Episodes::insert($episodes);
         return redirect('/series')->with('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso");
     }
 

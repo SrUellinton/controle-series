@@ -7,7 +7,8 @@
 	@endisset
 	<ul class="list-group">
 		@foreach ( $series as $serie)
-			<li class="list-group-item d-flex justify-content-between align-items-center">{{ $serie->nome }}
+			<li class="list-group-item d-flex justify-content-between align-items-center">
+				<a href="{{route('seasons.index', $serie->id)}}">{{ $serie->nome }}</a>
 				<span class="d-flex">
 					<a class="btn btn-primary btn-sm ml-5" href="{{route('series.edit',$serie->id)}}">
 						<span class="material-symbols-outlined mt-1"> edit_note</span>
