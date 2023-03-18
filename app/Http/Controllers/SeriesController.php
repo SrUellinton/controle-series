@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Episodes;
-use App\Models\Seasons;
+use App\Http\Requests\SeriesFormRequest;
+use App\Models\Episode;
+use App\Models\Season;
 use App\Models\Series;
+use App\Repositories\SeriesRepository;
 use Illuminate\Http\Request;
 
 class SeriesController extends Controller
 {
+    public function __construct(private SeriesRepository $repository)
+    {
+        $this->middleware('auth')->except('index');
+    }
+
     //
     public function index(Request $request)
     {
@@ -19,34 +26,14 @@ class SeriesController extends Controller
         return view('series.index', ['series' => $series])
         ->with('mensagemSucesso', $mensagemSucesso);
     }
-    
+
     public function create(){
         return view('series.create');
     }
 
-    public function store(Request $request){
-        //mass assigmment 
-        $serie = Series::create($request->all());
-        $seasons = [];
-        for ($i = 1; $i <= $request->seasonsQty; $i++) { 
-            $seasons[] = [
-                'series_id' => $serie->id,
-                'number' => $i
-            ];
-        }
-        Seasons::insert($seasons);
+    public function store(SeriesFormRequest $request){
+        $serie = $this->repository->add($request);
 
-        $episodes = [];
-        foreach ($serie->seasons as $season) {
-            for ($j = 1; $j <= $request->episodesPerSeason; $j++) {
-                $episodes[] = [
-                    'seasons_id' => $season->id,
-                    'number' => $j
-                ];
-            }
-        }
-
-        Episodes::insert($episodes);
         return redirect('/series')->with('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso");
     }
 
@@ -58,11 +45,12 @@ class SeriesController extends Controller
     }
 
     public function edit(Series $series){
-        return view('series.edit')->with('serie', $series);
+        $season = $series->seasons()->with('episodes')->first();
+
+        return view('series.edit', ['serie'=> $series, 'season' => $season]);
     }
 
     public function update (Series $series, Request $request){
-
         $series->fill($request->all());
         $series->save();
         return to_route('series.index')

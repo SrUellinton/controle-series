@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Seasons extends Model
+class Season extends Model
 {
     use HasFactory;
     protected $fillable = ['number'];
@@ -17,6 +17,12 @@ class Seasons extends Model
 
     public function episodes()
     {
-        return $this->hasMany(Episodes::class);
+        return $this->hasMany(Episode::class);
+    }
+
+    public function numberOfWatchedEpisodes(): int {
+        return $this->episodes
+            ->filter(fn ($episode) => $episode->watched)
+            ->count();
     }
 }

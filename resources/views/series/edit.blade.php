@@ -1,5 +1,4 @@
 <x-layout title="Editar Série - {!! $serie->nome !!}">
-   <x-series.form :action="route('series.update', $serie->id)" :nome="$serie->nome" :update="true"/>
       <form action="{{ route('series.update', $serie->id) }}" method="POST">
         @csrf
         <div class="row mb-3">
@@ -10,7 +9,7 @@
                      id="nome" 
                      name="nome" 
                      class="form-control"
-                     value="{{old('nome')}}">
+                     value="{{$serie->nome}}">
            </div>
            <div class="col-2">
                <label for="seasons" class="form-label">N° Temporada:</label>
@@ -26,8 +25,7 @@
                      id="episodesPerSeason" 
                      name="episodesPerSeason" 
                      class="form-control"
-                     value="{{$serie}}">
-                     @dd($serie->seasons)
+                     value="{{$season->episodes->count()}}">
            </div>
         </div>
         <button type="submit" class="btn btn-primary">Adicionar</button>
