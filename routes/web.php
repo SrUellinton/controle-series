@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
+use App\Mail\SeriesCreated;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Series extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'cover'];
     //fillable => ignora tudo que não está aqui;
 
     public function seasons()
